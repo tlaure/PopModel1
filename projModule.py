@@ -6,18 +6,6 @@ Created on Wed Nov  7 19:02:47 2018
 @author: Thomas
 """
 
-def projPop1(pop0,deathRates): #1ere approche simpliste
-    #pop0 is population as of 1of january t
-    
-    import numpy as np
-    
-    pop0AfterDeath=pop0-pop0**deathRates
-    newBorn = np.array([0])
-    popBeforeNewBorn=pop0AfterDeath[:pop0AfterDeath.size-1]
-    pop0AfterYear=np.concatenate((newBorn,popBeforeNewBorn), axis=0)
-    return(pop0AfterYear)
-
-
 def projPop2(popHistM,popHistW,yearsHist,n): 
     #To project the population this function use the historical pyramid
     #Evaluate the death rate function at each age using regressions
@@ -27,7 +15,8 @@ def projPop2(popHistM,popHistW,yearsHist,n):
     #Call the function for the mortality rates
     mortalityRatesM=projMortalityRates(popHistM,n)
     mortalityRatesW=projMortalityRates(popHistW,n)
-    BYpower = pandas.read_csv('~/Desktop/Documents/Project/BYpower.csv',sep=';')
+    '''Updated with link'''
+    BYpower = pandas.read_csv('BYpower.csv',sep=';')
     (futureBirthRate,BirthMFratio)=projBirth(popHistM,popHistW,yearsHist,n,BYpower)
     nAges=popHistM[0,:].size
     yearHist=popHistM[:,0].size
@@ -42,16 +31,13 @@ def projPop2(popHistM,popHistW,yearsHist,n):
     for iYear in range(1,n+1):
         #Begin with the birth that happen during the first year
         AvgMF=(sum(popProjM[iYear-1,17:44])+sum(popProjW[iYear-1,17:44]))/2
-        print(AvgMF)
         birthYear=AvgMF*futureBirthRate[iYear-1]
-        print(futureBirthRate[iYear-1])
         popProjM[iYear,:]=projDeathAndAging('M',popProjM[iYear-1,:],mortalityRatesM[iYear-1],birthYear,BirthMFratio)
         popProjW[iYear,:]=projDeathAndAging('F',popProjW[iYear-1,:],mortalityRatesW[iYear-1],birthYear,BirthMFratio)
     return(popProjM,popProjW)
 
 
-def projDeathAndAging(S,pop0,deathRates,birthYear,BirthMFratio): #1ere approche simpliste
-    #pop0 is population as of 1of january t
+def projDeathAndAging(S,pop0,deathRates,birthYear,BirthMFratio): 
     
     import numpy as np
     

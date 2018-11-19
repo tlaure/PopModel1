@@ -8,7 +8,7 @@ Created on Tue Nov  6 21:06:18 2018
 
 import pandas 
 #Import pyramid data from csv file
-pyramid = pandas.read_csv('~/Desktop/Documents/Project/importP.csv',sep=';')
+pyramid = pandas.read_csv('importP.csv',sep=';')
 
 #divide the pyramid into Male & Female
 male = pyramid['sex']=='M'
